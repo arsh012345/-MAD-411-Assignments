@@ -1,20 +1,31 @@
 package com.example.assignment_6
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var editText: EditText
+    private lateinit var viewResult: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        editText = findViewById(R.id.edit_text)
+        viewResult = findViewById(R.id.view_name)
+        val buttonShow = findViewById<Button>(R.id.show_button)
+
+        buttonShow.setOnClickListener {
+            showResult(it)
         }
+    }
+
+    fun showResult(view: View) {
+        val name = editText.text.toString().trim()
+        viewResult.text = if (name.isNotEmpty()) "Hello, $name!" else "Enter your name in above box."
     }
 }

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
     <TextView
@@ -12,8 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Enter your name"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="72dp" />
+        />
 
     <EditText
         android:id="@+id/edit_text"
@@ -30,15 +30,15 @@
         android:layout_width="230dp"
         android:layout_height="48dp"
         android:text="Show Name"
+        android:onClick="showResult"
         tools:layout_editor_absoluteX="90dp"
         tools:layout_editor_absoluteY="198dp" />
 
-    <EditText
+    <TextView
         android:id="@+id/view_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="195dp"
         tools:layout_editor_absoluteY="276dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
