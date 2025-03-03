@@ -15,13 +15,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        editText = findViewById(R.id.edit_text)
+       /* editText = findViewById(R.id.edit_text)
         viewResult = findViewById(R.id.view_name)
         val buttonShow = findViewById<Button>(R.id.show_button)
 
         buttonShow.setOnClickListener {
             showResult(it)
-        }
+        }*/
     }
 
     fun showResult(view: View) {

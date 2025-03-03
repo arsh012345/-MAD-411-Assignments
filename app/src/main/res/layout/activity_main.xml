@@ -12,33 +12,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Expense Tracker App"
-        android:textSize="24sp"
-        />
+        android:textSize="34sp"
+        android:textStyle="bold|italic" />
 
     <EditText
-        android:id="@+id/edit_text"
+        android:id="@+id/edit_expense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="5"
+        android:hint="Expense Name"
         android:importantForAutofill="no"
         android:minHeight="48dp"
-        tools:layout_editor_absoluteX="153dp"
-        tools:layout_editor_absoluteY="124dp" />
+       />
+    
+    <EditText
+        android:id="@+id/edit_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="5"
+        android:hint="Amount"
+        android:importantForAutofill="no"
+        android:minHeight="48dp"
+        />
 
     <Button
-        android:id="@+id/show_button"
+        android:id="@+id/cal_expense"
         android:layout_width="230dp"
         android:layout_height="48dp"
-        android:text="Show Name"
         android:onClick="showResult"
-        tools:layout_editor_absoluteX="90dp"
-        tools:layout_editor_absoluteY="198dp" />
+        android:text="Add Expense"
+    />
 
     <TextView
-        android:id="@+id/view_name"
+        android:id="@+id/recycle_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="195dp"
-        tools:layout_editor_absoluteY="276dp" />
+        />
 </LinearLayout>
