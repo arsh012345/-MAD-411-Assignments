@@ -1,52 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E8EBB1"
     android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Expense Tracker App"
-        android:textSize="34sp"
-        android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="378dp"
+            android:layout_height="44dp"
+            android:text="Expense Tacker Application"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
 
-    <EditText
-        android:id="@+id/edit_expense"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="5"
-        android:hint="Expense Name"
-        android:importantForAutofill="no"
-        android:minHeight="48dp"
-       />
-    
-    <EditText
-        android:id="@+id/edit_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="5"
-        android:hint="Amount"
-        android:importantForAutofill="no"
-        android:minHeight="48dp"
-        />
+        <EditText
+            android:id="@+id/mainExpenseName"
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:hint="Expense Name" />
 
-    <Button
-        android:id="@+id/cal_expense"
-        android:layout_width="230dp"
-        android:layout_height="48dp"
-        android:onClick="showResult"
-        android:text="Add Expense"
-    />
+        <EditText
+            android:id="@+id/mainExpenseAmt"
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:hint="Amount"
+            android:inputType="numberDecimal" />
 
-    <TextView
-        android:id="@+id/recycle_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        />
+        <Button
+            android:id="@+id/btAdd"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:text="Add Expense" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="343dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
 </LinearLayout>
