@@ -1,7 +1,6 @@
 package com.example.assignment_6
 
 import android.os.Bundle
-
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -30,24 +29,35 @@ class MainActivity : AppCompatActivity() {
         mainExpenseAmt = findViewById(R.id.mainExpenseAmt)
         btAdd = findViewById(R.id.btAdd)
         recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this) //used layout manager to put list items easily
+        recyclerView.layoutManager =
+            LinearLayoutManager(this) //used layout manager to put list items easily
         expenseAdapter = ExpenseAdapter()
         recyclerView.adapter = expenseAdapter
-                btAdd.setOnClickListener {
-                    val name = mainExpenseName.text.toString().trim()         //taking name string
-                    val amount = mainExpenseAmt.text.toString().trim()     //taking amount number
+        btAdd.setOnClickListener {
+            val name = mainExpenseName.text.toString().trim()         //taking name string
+            val amount = mainExpenseAmt.text.toString().trim()     //taking amount number
 
-                    if (name.isNotEmpty() && amount.isNotEmpty()) {
-                        listExpense.add(Pair(name, amount))
-                        expenseAdapter.notifyItemInserted(listExpense.size - 1)
-                        mainExpenseName.text.clear()
-                        mainExpenseAmt.text.clear()
-                    } else {
-                        Toast.makeText(
-                            this, "Please enter both in above boxes",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+            if (name.isNotEmpty() && amount.isNotEmpty()) {
+                listExpense.add(Pair(name, amount))
+                expenseAdapter.notifyItemInserted(listExpense.size - 1)
+                mainExpenseName.text.clear()
+                mainExpenseAmt.text.clear()
+            } else {
+                Toast.makeText(
+                    this, "Please enter both in above boxes",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
+        inner class ExpenseAdapter :       //using inner class for viewHolder to place individual items
+            RecyclerView.Adapter<ExpenseAdapter.ExpenseView>() {
+            inner class ExpenseView(itemView: View) :
+                RecyclerView.ViewHolder(itemView) {
+                val name: TextView = itemView.findViewById(R.id.expenseName)
+                val amount: TextView = itemView.findViewById(R.id.expenseAmt)
+                val btDelete: Button = itemView.findViewById(R.id.btDelete)
+            }
+        }
+}
+
