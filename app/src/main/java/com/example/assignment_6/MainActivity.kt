@@ -63,7 +63,19 @@ class MainActivity : AppCompatActivity() {
                     ExpenseView {
                 val view = LayoutInflater.from(parent.context)           //using layout inflate to attach item_expense.xml to main.xml
                     .inflate(R.layout.item_expense, parent, false)
-                return ExpenseView(view) }
-        }
+                return ExpenseView(view)
+            }
+
+            override fun onBindViewHolder(holder: ExpenseView, position: Int) {     //using built in recyclerview functions
+            val (name, amount) = listExpense[position]            //putting name and amount in listExpense list
+            holder.name.text = name
+            holder.amount.text = amount
+            holder.btDelete.setOnClickListener {
+                listExpense.removeAt(position)
+                notifyItemRemoved(position)           //using recyclerview method notify
+           }
+       }
+    override fun getItemCount(): Int = listExpense.size    //using getItemCount another RecyclerView adapter class function
+    }
 }
 

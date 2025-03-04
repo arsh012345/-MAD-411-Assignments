@@ -19,6 +19,7 @@
             android:id="@+id/mainExpenseName"
             android:layout_width="143dp"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:hint="Expense Name" />
 
         <EditText
@@ -39,5 +40,4 @@
             android:layout_width="343dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp" />
-
 </LinearLayout>
