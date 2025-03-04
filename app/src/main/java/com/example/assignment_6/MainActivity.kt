@@ -58,6 +58,12 @@ class MainActivity : AppCompatActivity() {
                 val amount: TextView = itemView.findViewById(R.id.expenseAmt)
                 val btDelete: Button = itemView.findViewById(R.id.btDelete)
             }
+
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): //using built in recyclerview functions
+                    ExpenseView {
+                val view = LayoutInflater.from(parent.context)           //using layout inflate to attach item_expense.xml to main.xml
+                    .inflate(R.layout.item_expense, parent, false)
+                return ExpenseView(view) }
         }
 }
 
