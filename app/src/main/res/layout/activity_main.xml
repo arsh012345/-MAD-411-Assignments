@@ -6,6 +6,11 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+        <FrameLayout
+            android:id="@+id/headerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="378dp"
@@ -35,9 +40,20 @@
             android:layout_height="wrap_content"
             android:text="Add Expense" />
 
+        <Button
+            android:id="@+id/btFinancialTips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Financial Tips!" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="343dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp" />
+
+        <FrameLayout
+            android:id="@+id/footerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 </LinearLayout>
