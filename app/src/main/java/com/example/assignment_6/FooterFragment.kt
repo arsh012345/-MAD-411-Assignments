@@ -1,6 +1,5 @@
 package com.example.assignment_6
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ class FooterFragment : Fragment() {
     private lateinit var TotalExpnse: TextView         //created variables here
     private var totalExpense = 0.0
 
-    //@SuppressLint("MissingInflatedId")        //it came error solving help by studio itself
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
