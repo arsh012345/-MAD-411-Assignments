@@ -38,8 +38,6 @@
             android:layout_height="wrap_content"
             android:text="Add Expense" />
 
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="343dp"

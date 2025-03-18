@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         inner class ExpenseView(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val name: TextView = itemView.findViewById(R.id.expenseName)
             val amount: TextView = itemView.findViewById(R.id.expenseAmt)
+            val date: TextView = itemView.findViewById(R.id.expenseDate)
             val btDelete: Button = itemView.findViewById(R.id.btDelete)
             val btDetails: Button = itemView.findViewById(R.id.btDetails)      //details added here
         }
@@ -125,6 +126,7 @@ class MainActivity : AppCompatActivity() {
             val (name, amount, date) = listExpense[position]           //added date in binding
             holder.name.text = name
             holder.amount.text = amount
+            holder.date.text = date
 
             holder.btDelete.setOnClickListener {
                 listExpense.removeAt(position)
@@ -133,6 +135,20 @@ class MainActivity : AppCompatActivity() {
                 updateFooterTotal()                   //Updating total after delete
             }
 
+            holder.btDetails.setOnClickListener {
+                //calling expense details here by intent
+                val intent = Intent(holder.itemView.context, ExpenseDetailsActivity::class.java).apply {
+                    putExtra("expenseName", name)
+                    putExtra("expenseAmount", amount)            //taking name,amount and date from intent
+                    putExtra("expenseDate", date)
+                }
+
+                if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()) {
+                    holder.itemView.context.startActivity(intent)       //putting details if availble
+                } else {
+                    Snackbar.make(holder.itemView, "not valid expense, please put valid expense", Snackbar.LENGTH_SHORT).show()
+                }
+            }
         }
         override fun getItemCount(): Int = listExpense.size
     }
