@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/totalExpense"
+        android:id="@+id/totalExpenses"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Total Expenses: $0"

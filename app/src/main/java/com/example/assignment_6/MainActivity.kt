@@ -1,81 +1,139 @@
 package com.example.assignment_6
 
+
+
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import android.view.LayoutInflater
-import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainExpenseName: EditText
     private lateinit var mainExpenseAmt: EditText
+    private lateinit var mainExpenseDate: EditText
     private lateinit var btAdd: Button
     private lateinit var recyclerView: RecyclerView
-    private val listExpense = mutableListOf<Pair<String, String>>()
+    private lateinit var btFinancialTips: Button                      //button for financial tip
+    private lateinit var footerFragment: FooterFragment                 //footerFragment
+    private val listExpense = mutableListOf<Triple<String, String, String>>() //created name amount and date in list
     private lateinit var expenseAdapter: ExpenseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d("Lifecycle", "onCreate called")      //Logging lifecycle method for create
 
         mainExpenseName = findViewById(R.id.mainExpenseName)
-        mainExpenseAmt = findViewById(R.id.mainExpenseAmt)
+        mainExpenseAmt = findViewById(R.id.mainExpenseAmt)            //putting every require id's here
+        mainExpenseDate = findViewById(R.id.mainExpenseDate)
         btAdd = findViewById(R.id.btAdd)
         recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager =
-            LinearLayoutManager(this) //used layout manager to put list items easily
+        btFinancialTips = findViewById(R.id.btFinancialTips)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
         expenseAdapter = ExpenseAdapter()
         recyclerView.adapter = expenseAdapter
-        btAdd.setOnClickListener {
-            val name = mainExpenseName.text.toString().trim()         //taking name string
-            val amount = mainExpenseAmt.text.toString().trim()     //taking amount number
 
-            if (name.isNotEmpty() && amount.isNotEmpty()) {
-                listExpense.add(Pair(name, amount))
+        footerFragment = FooterFragment()        //created FooterFragment
+        addFragments()                           //Loading it
+
+        btAdd.setOnClickListener {
+            val name = mainExpenseName.text.toString().trim()
+            val amount = mainExpenseAmt.text.toString().trim()
+            val date = mainExpenseDate.text.toString().trim()          //added new date here
+
+            if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()) {
+                listExpense.add(Triple(name, amount, date))
                 expenseAdapter.notifyItemInserted(listExpense.size - 1)
+                updateFooterTotal() // Update expense total
                 mainExpenseName.text.clear()
                 mainExpenseAmt.text.clear()
+                mainExpenseDate.text.clear()
             } else {
-                Toast.makeText(
-                    this, "Please enter both in above boxes",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Snackbar.make(it, "Please enter all fields", Snackbar.LENGTH_SHORT).show()
+                //using snackbar instead of toast
             }
         }
+
+        btFinancialTips.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.nerdwallet.com"))
+            //intent.action_view to open webpage
+            startActivity(intent)
+        }
     }
-        inner class ExpenseAdapter :       //using inner class for viewHolder to place individual items
-            RecyclerView.Adapter<ExpenseAdapter.ExpenseView>() {
-            inner class ExpenseView(itemView: View) :
-                RecyclerView.ViewHolder(itemView) {
-                val name: TextView = itemView.findViewById(R.id.expenseName)
-                val amount: TextView = itemView.findViewById(R.id.expenseAmt)
-                val btDelete: Button = itemView.findViewById(R.id.btDelete)
-            }
 
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): //using built in recyclerview functions
-                    ExpenseView {
-                val view = LayoutInflater.from(parent.context)           //using layout inflate to attach item_expense.xml to main.xml
-                    .inflate(R.layout.item_expense, parent, false)
-                return ExpenseView(view)
-            }
+    //logs added here
+    override fun onResume() {
+        super.onResume()
+        Log.d("Lifecycle", "onResume called")
+    }
 
-            override fun onBindViewHolder(holder: ExpenseView, position: Int) {     //using built in recyclerview functions
-            val (name, amount) = listExpense[position]            //putting name and amount in listExpense list
+    override fun onPause() {
+        super.onPause()
+        Log.d("Lifecycle", "onPause called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("Lifecycle", "onStop called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Lifecycle", "onDestroy called")
+    }
+
+    private fun updateFooterTotal() {
+        val total = listExpense.sumOf { it.second.toDoubleOrNull() ?: 0.0 }
+        footerFragment.updateTotalExpense(total)                //updating footer total here
+    }
+
+    private fun addFragments() {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+        transaction.add(R.id.headerContainer, HeaderFragment())      //added fragment of header and footer here
+        transaction.add(R.id.footerContainer, footerFragment)
+        transaction.commit()
+    }
+
+    inner class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseView>() {
+        inner class ExpenseView(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val name: TextView = itemView.findViewById(R.id.expenseName)
+            val amount: TextView = itemView.findViewById(R.id.expenseAmt)
+            val btDelete: Button = itemView.findViewById(R.id.btDelete)
+            val btDetails: Button = itemView.findViewById(R.id.btDetails)      //details added here
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseView {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_expense, parent, false)
+            return ExpenseView(view)
+        }
+
+        override fun onBindViewHolder(holder: ExpenseView, position: Int) {
+            val (name, amount, date) = listExpense[position]           //added date in binding
             holder.name.text = name
             holder.amount.text = amount
+
             holder.btDelete.setOnClickListener {
                 listExpense.removeAt(position)
-                notifyItemRemoved(position)           //using recyclerview method notify
-           }
-       }
-    override fun getItemCount(): Int = listExpense.size    //using getItemCount another RecyclerView adapter class function
+                notifyItemRemoved(position)
+                Snackbar.make(it, "Expense Deleted", Snackbar.LENGTH_LONG).show()
+                updateFooterTotal()                   //Updating total after delete
+            }
+
+        }
+        override fun getItemCount(): Int = listExpense.size
     }
 }
-
