@@ -4,36 +4,41 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
 
-    <TextView
-        android:id="@+id/expenseName"
-        android:layout_width="3dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Expense Name"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/expenseAmt"
-        android:layout_width="3dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Amount"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/expenseName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Expense Name"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/expenseDate"
-        android:layout_width="3dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Date"
-        android:textSize="16sp" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/expenseAmt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Amount"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/expenseDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Date"
+            android:textSize="16sp" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,14 +47,19 @@
 
         <Button
             android:id="@+id/btDelete"
-            android:layout_width="139dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
             android:text="Delete" />
 
         <Button
             android:id="@+id/btDetails"
-            android:layout_width="139dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:minHeight="48dp"
             android:text="Details" />
     </LinearLayout>
 </LinearLayout>
