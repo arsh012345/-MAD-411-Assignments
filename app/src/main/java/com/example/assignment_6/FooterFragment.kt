@@ -10,19 +10,15 @@ import androidx.fragment.app.Fragment
 class FooterFragment : Fragment() {
 
     private lateinit var TotalExpnse: TextView         //created variables here
-    private var totalExpense = 0.0
+
+    fun updateTotal(total: String) {
+        view?.findViewById<TextView>(R.id.totalExpenses)?.text = total
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_footer, container, false)
-        TotalExpnse = view.findViewById(R.id.totalExpenses)
-        return view
-    }
-
-    fun updateTotalExpense(newTotal: Double) {           //function to find total
-        totalExpense = newTotal
-        TotalExpnse.text = "Total Expenses: $$totalExpense"      //putting total here
+        return inflater.inflate(R.layout.fragment_footer, container, false)
     }
 }
