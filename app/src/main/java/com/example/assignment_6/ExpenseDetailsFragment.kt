@@ -1,35 +1,34 @@
 package com.example.assignment_6
 
-
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
-class ExpenseDetailsActivity : Fragment() {
+class ExpenseDetailsFragment : Fragment() {
     private lateinit var dName: TextView
-    private lateinit var dAmount: TextView                   //putting variable here
-    private lateinit var dDate: TextView
+    private lateinit var dAmount: TextView
+    private lateinit var dDate: TextView          //putting variables here
     private lateinit var btBack: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_expense_details)
+    private val arguts: ExpenseDetailsFragmentArgs by navArgs()
 
-        dName = findViewById(R.id.detailExpenseName)
-        dAmount = findViewById(R.id.detailExpenseAmount)
-        dDate = findViewById(R.id.detailExpenseDate)
-        btBack = findViewById(R.id.btBackHome)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_expense_details, container, false)
 
-        dName.text = "Name of expense: $name"
-        dAmount.text = "Amount: $amount"
-        dDate.text = "Date: $date"
+        dName = view.findViewById(R.id.detailExpenseName)
+        dAmount = view.findViewById(R.id.detailExpenseAmount)
+        dDate = view.findViewById(R.id.detailExpenseDate)
+        btBack = view.findViewById(R.id.btBackHome)
+
+        dName.text = "Name of expense: ${arguts.name}"
+        dAmount.text = "Amount: ${arguts.amount}"
+        dDate.text = "Date: ${arguts.date}"
 
         btBack.setOnClickListener {
-            //intent to home location of app
-
+            findNavController().navigateUp()
         }
         return view
     }

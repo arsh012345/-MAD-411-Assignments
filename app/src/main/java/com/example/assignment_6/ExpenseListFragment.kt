@@ -1,5 +1,8 @@
 package com.example.assignment_6
 
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,13 +23,14 @@ class ExpenseListFragment : Fragment() {
     private lateinit var btAdd: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var btFinancialTips: Button                 //button for financial tip
-    private lateinit var totalTextView: TextView
+   // private lateinit var totalTextView: TextView
 
     private lateinit var expenseAdapter: ExpenseAdapter
-    private var listExpense = mutableListOf<Expense>()
+    private var listExpense = mutableListOf<Expense>()          //making mutable list
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_expense_list, container, false)
+
         Log.d("Lifecycle", "onCreate called")      //Logging lifecycle method for create
 
         mainExpenseName = view.findViewById(R.id.mainExpenseName)
@@ -35,13 +39,14 @@ class ExpenseListFragment : Fragment() {
         btAdd = view.findViewById(R.id.btAdd)
         recyclerView = view.findViewById(R.id.recyclerView)           //putting every require id's here
         btFinancialTips = view.findViewById(R.id.btFinancialTips)
-        totalTextView = view.findViewById(R.id.totalExpenses)
+        //totalTextView = view.findViewById(R.id.totalExpenses)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         expenseAdapter = ExpenseAdapter()
         recyclerView.adapter = expenseAdapter
 
-        loadExpenses()
+        listExpense = loadExpenses()
+        expenseAdapter.notifyDataSetChanged()
         updateFooterTotal()
 
         btAdd.setOnClickListener {
@@ -49,7 +54,7 @@ class ExpenseListFragment : Fragment() {
             val amount = mainExpenseAmt.text.toString().trim()
             val date = mainExpenseDate.text.toString().trim()           //added new date here
 
-            if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()) {
+            if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()){
                 val expense = Expense(name, amount, date)
                 listExpense.add(expense)
                 expenseAdapter.notifyItemInserted(listExpense.size - 1)
@@ -58,9 +63,11 @@ class ExpenseListFragment : Fragment() {
                 mainExpenseName.text.clear()
                 mainExpenseAmt.text.clear()
                 mainExpenseDate.text.clear()
-            } else {
+            }
+            else
+            {
                 Snackbar.make(view, "Please enter in all fields", Snackbar.LENGTH_SHORT).show()
-            } //using snackbar instead of toast
+            }       //using snackbar instead of toast
         }
 
         btFinancialTips.setOnClickListener {
@@ -71,10 +78,13 @@ class ExpenseListFragment : Fragment() {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.headerContainer, HeaderFragment())
         transaction.replace(R.id.footerContainer, FooterFragment()) //added fragment of header and footer here
-        transaction.commit()
-
+        transaction.commit()                      //transactions for header and footer
+        recyclerView.post {
+            updateFooterTotal() //updating expense list everytime app opens
+        }
         return view
     }
+
     //logs added here
     override fun onResume() {
         super.onResume()
@@ -98,8 +108,9 @@ class ExpenseListFragment : Fragment() {
 
     private fun updateFooterTotal() {
         val total = listExpense.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
-        totalTextView.text = "Total Expenses: $$total"            //updating footer total here
-    }
+        val footerFragment = parentFragmentManager.findFragmentById(R.id.footerContainer) as? FooterFragment
+        footerFragment?.updateTotal("Total Expenses: $$total")
+    }                           //updating footer total here
 
     private fun saveExpenses() {                               //saving expense in json file here
         val jsonStr = Gson().toJson(listExpense)
@@ -120,17 +131,19 @@ class ExpenseListFragment : Fragment() {
             expenseList.addAll(loadedExpenses)
 
             Log.d("FileStorage", "Expenses loaded successfully")
-        } catch (e: FileNotFoundException) {
+        }
+        catch (e: FileNotFoundException)
+        {
             Log.e("FileStorage", "File not found: ${e.message}")
-        } catch (e: IOException) {
+        } catch (e: IOException)
+        {
             Log.e("FileStorage", "Error reading file: ${e.message}")
         }
         return expenseList
     }
 
-
-    inner class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseView>() {
-        inner class ExpenseView(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ExpenseAdapter : RecyclerView.Adapter<ExpenseAdapter.ExpenseView>(){
+        inner class ExpenseView(itemView: View) : RecyclerView.ViewHolder(itemView){
             val name: TextView = itemView.findViewById(R.id.expenseName)
             val amount: TextView = itemView.findViewById(R.id.expenseAmt)
             val date: TextView = itemView.findViewById(R.id.expenseDate)
@@ -154,14 +167,14 @@ class ExpenseListFragment : Fragment() {
                 notifyItemRemoved(position)
                 updateFooterTotal()           //Updating total after delete
                 saveExpenses()
-                Snackbar.make(holder.itemView, "Expense Deleted", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(holder.itemView, "Expense has been deleted", Snackbar.LENGTH_SHORT).show()
             }
 
             holder.btDetails.setOnClickListener {
                 val action = ExpenseListFragmentDirections
                     .actionExpenseListFragmentToExpenseDetailsFragment(
                         name = expense.name,
-                        amount = expense.amount,   //taking name,amount and date
+                        amount = expense.amount,   //taking name,amount and date with action
                         date = expense.date
                     )
                 findNavController().navigate(action)

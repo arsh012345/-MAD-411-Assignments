@@ -8,17 +8,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 class FooterFragment : Fragment() {
-
-    private lateinit var TotalExpnse: TextView         //created variables here
-
-    fun updateTotal(total: String) {
-        view?.findViewById<TextView>(R.id.totalExpenses)?.text = total
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_footer, container, false)
+    }
+
+    fun updateTotal(totalHere: String) {              //update total fun in footer
+        view?.findViewById<TextView>(R.id.totalExpenses)?.text = totalHere
     }
 }
