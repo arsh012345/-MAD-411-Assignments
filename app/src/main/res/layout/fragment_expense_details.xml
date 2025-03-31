@@ -21,10 +21,17 @@
         android:text="Amount: " />
 
     <TextView
+        android:id="@+id/detailConvertedCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CAD:- "
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/detailExpenseDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:text="Date: " />
 
     <Button
