@@ -9,9 +9,14 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment_6.network.RetrofitInterface
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -23,10 +28,14 @@ class ExpenseListFragment : Fragment() {
     private lateinit var btAdd: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var btFinancialTips: Button                 //button for financial tip
+    private lateinit var currencySpinner: Spinner
    // private lateinit var totalTextView: TextView
 
     private lateinit var expenseAdapter: ExpenseAdapter
     private var listExpense = mutableListOf<Expense>()          //making mutable list
+
+    private var cadRates: Map<String, Double> = emptyMap()
+    private var selectedCurrency: String = "CAD"            //putting default string to CAD
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_expense_list, container, false)
@@ -38,6 +47,7 @@ class ExpenseListFragment : Fragment() {
         mainExpenseDate = view.findViewById(R.id.mainExpenseDate)
         btAdd = view.findViewById(R.id.btAdd)
         recyclerView = view.findViewById(R.id.recyclerView)           //putting every require id's here
+        currencySpinner = view.findViewById(R.id.mainSpinner)
         btFinancialTips = view.findViewById(R.id.btFinancialTips)
         //totalTextView = view.findViewById(R.id.totalExpenses)
 
@@ -48,6 +58,7 @@ class ExpenseListFragment : Fragment() {
         listExpense = loadExpenses()
         expenseAdapter.notifyDataSetChanged()
         updateFooterTotal()
+        fetchRates()
 
         btAdd.setOnClickListener {
             val name = mainExpenseName.text.toString().trim()
@@ -55,7 +66,17 @@ class ExpenseListFragment : Fragment() {
             val date = mainExpenseDate.text.toString().trim()           //added new date here
 
             if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()){
-                val expense = Expense(name, amount, date)
+                val rate = cadRates[selectedCurrency] ?: 1.0
+                val amountDouble = amount.toDoubleOrNull() ?: 0.0
+                val converted = amountDouble * rate     //amount multiply by rate
+
+                val expense = Expense(
+                    name = name,
+                    amount = amount,
+                    date = date,
+                    currency = selectedCurrency,
+                    convertedCost = converted
+                )
                 listExpense.add(expense)
                 expenseAdapter.notifyItemInserted(listExpense.size - 1)
                 updateFooterTotal()
@@ -104,6 +125,36 @@ class ExpenseListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("Lifecycle", "onDestroy called")
+    }
+
+    private fun fetchRates(){
+        lifecycleScope.launch{                           //lifecycle start here
+            try{
+                val response = withContext(Dispatchers.IO){
+                    RetrofitInterface.api.getRates()
+                }
+
+                cadRates = response.cad
+                val currencyList = cadRates.keys.sorted()     //cadRates list sorted
+
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, currencyList)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                currencySpinner.adapter = adapter    //adapter with built in spinner ids
+
+                currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+                {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long)
+                    {
+                        selectedCurrency = currencyList[position]
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>){} //nothing selected stay empty
+                }
+            }
+            catch(e: Exception)
+            {
+                Toast.makeText(requireContext(), "Failed in fetching", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateFooterTotal() {
