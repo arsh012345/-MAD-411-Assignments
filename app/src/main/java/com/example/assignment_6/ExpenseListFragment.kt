@@ -198,6 +198,7 @@ class ExpenseListFragment : Fragment() {
             val name: TextView = itemView.findViewById(R.id.expenseName)
             val amount: TextView = itemView.findViewById(R.id.expenseAmt)
             val date: TextView = itemView.findViewById(R.id.expenseDate)
+            val converted: TextView = itemView.findViewById(R.id.convertedCost) //added coverted cost id here
             val btDelete: Button = itemView.findViewById(R.id.btDelete)
             val btDetails: Button = itemView.findViewById(R.id.btDetails) //details added here
         }
@@ -210,8 +211,9 @@ class ExpenseListFragment : Fragment() {
         override fun onBindViewHolder(holder: ExpenseView, position: Int) {
             val expense = listExpense[position]
             holder.name.text = expense.name
-            holder.amount.text = expense.amount
+            holder.amount.text = "${expense.amount} ${expense.currency}"  //it will for original currency
             holder.date.text = expense.date         //added date in binding
+            holder.converted.text = "CAD:- ${"%.2f".format(expense.convertedCost)}"  //it will show the converted cost
 
             holder.btDelete.setOnClickListener {
                 listExpense.removeAt(position)
@@ -225,8 +227,10 @@ class ExpenseListFragment : Fragment() {
                 val action = ExpenseListFragmentDirections
                     .actionExpenseListFragmentToExpenseDetailsFragment(
                         name = expense.name,
-                        amount = expense.amount,   //taking name,amount and date with action
-                        date = expense.date
+                        amount = expense.amount,   //taking name,amount,date,currency and convertedcost with action
+                        date = expense.date,
+                        currency = expense.currency,
+                        convertedCost = expense.convertedCost.toFloat()
                     )
                 findNavController().navigate(action)
             }

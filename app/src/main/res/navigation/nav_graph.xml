@@ -25,5 +25,11 @@
         <argument
             android:name="date"
             app:argType="string" />
+        <argument
+            android:name="currency"
+            app:argType="string" />
+        <argument
+            android:name="convertedCost"
+            app:argType="float" />
     </fragment>
 </navigation>
