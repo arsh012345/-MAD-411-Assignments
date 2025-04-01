@@ -4,8 +4,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInterface{
-    private const val BASE_URL = "https://cdn.jsdelivr.net/gh/fawazahmed0/exchange-api@1/latest/currencies/"
-     //using provided api from github
+    private const val BASE_URL = "https://v6.exchangerate-api.com/v6/e588eceef6462f4d62c57c79/"
+    //using my own created free api from exchangerate-api.com
+
     val api: ApiService by lazy {                   //api created here
         Retrofit.Builder()
             .baseUrl(BASE_URL)

@@ -69,8 +69,8 @@ class ExpenseListFragment : Fragment() {
             if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()){
                 val rate = cadRates[selectedCurrency] ?: 1.0
                 val amountDouble = amount.toDoubleOrNull() ?: 0.0
-                val converted = if (conversionNeeded.isChecked) amountDouble * rate else 0.0
-                //amount multiply by rate if switch is checked
+                val converted = if (conversionNeeded.isChecked) amountDouble / rate else 0.0
+                //amount divided by rate if switch is checked
 
                 val expense = Expense(
                     name = name,
@@ -143,9 +143,11 @@ class ExpenseListFragment : Fragment() {
                     RetrofitInterface.api.getRates()
                 }
 
-                cadRates = response.cad
-                val currencyList = cadRates.keys.sorted()     //cadRates list sorted
+                val allRates = response.conversion_rates
+                val usdToCad = allRates["CAD"] ?: throw IllegalStateException("CAD not avalible")
+                cadRates = allRates.mapValues { (_, usdToCurrency) -> usdToCurrency / usdToCad }
 
+                val currencyList = cadRates.keys.sorted()     //cadRates list sorted
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, currencyList)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 currencySpinner.adapter = adapter    //adapter with built in spinner ids
