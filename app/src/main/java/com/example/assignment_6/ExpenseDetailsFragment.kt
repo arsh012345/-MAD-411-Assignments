@@ -7,10 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
-class ExpenseDetailsFragment : Fragment() {
+class ExpenseDetailsFragment : Fragment(){
     private lateinit var dName: TextView
     private lateinit var dAmount: TextView
     private lateinit var dDate: TextView          //putting variables here
+    private lateinit var dConverted: TextView
     private lateinit var btBack: Button
 
     private val arguts: ExpenseDetailsFragmentArgs by navArgs()
@@ -20,12 +21,14 @@ class ExpenseDetailsFragment : Fragment() {
 
         dName = view.findViewById(R.id.detailExpenseName)
         dAmount = view.findViewById(R.id.detailExpenseAmount)
+        dConverted = view.findViewById(R.id.detailConvertedCost)
         dDate = view.findViewById(R.id.detailExpenseDate)
         btBack = view.findViewById(R.id.btBackHome)
 
         dName.text = "Name of expense: ${arguts.name}"
         dAmount.text = "Amount: ${arguts.amount}"
         dDate.text = "Date: ${arguts.date}"
+        dConverted.text = "Converted: %.2f CAD".format(arguts.convertedCost)
 
         btBack.setOnClickListener {
             findNavController().navigateUp()
