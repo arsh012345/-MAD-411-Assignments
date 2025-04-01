@@ -17,6 +17,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.core.widget.addTextChangedListener
 import com.example.assignment_6.network.RetrofitInterface
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -32,6 +33,7 @@ class ExpenseListFragment : Fragment() {
     private lateinit var currencySpinner: Spinner
     private lateinit var conversionNeeded: SwitchMaterial     //google material design switch added to enable currency spinner
    // private lateinit var totalTextView: TextView
+    private lateinit var convertView: TextView
     private lateinit var expenseAdapter: ExpenseAdapter
     private var listExpense = mutableListOf<Expense>()          //making mutable list
     private var cadRates: Map<String, Double> = emptyMap()
@@ -49,8 +51,13 @@ class ExpenseListFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)           //putting every require id's here
         currencySpinner = view.findViewById(R.id.mainSpinner)
         conversionNeeded = view.findViewById(R.id.switchOn)                //conversion button declared here
+        convertView = view.findViewById(R.id.convertView)
         btFinancialTips = view.findViewById(R.id.btFinancialTips)
         //totalTextView = view.findViewById(R.id.totalExpenses)
+
+        mainExpenseAmt.addTextChangedListener{
+            updateConvert()       //calling update convert here
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         expenseAdapter = ExpenseAdapter()
@@ -71,6 +78,14 @@ class ExpenseListFragment : Fragment() {
                 val amountDouble = amount.toDoubleOrNull() ?: 0.0
                 val converted = if (conversionNeeded.isChecked) amountDouble / rate else 0.0
                 //amount divided by rate if switch is checked
+
+                if(conversionNeeded.isChecked){       //simple logic for textview of converted cost
+                    convertView.text = "Converted:- %.2f CAD".format(converted)
+                    convertView.visibility = View.VISIBLE
+                }                //converted amount view if converstion is done
+                else{
+                    convertView.visibility = View.GONE
+                }
 
                 val expense = Expense(
                     name = name,
@@ -165,6 +180,21 @@ class ExpenseListFragment : Fragment() {
             {
                 Toast.makeText(requireContext(), "Failed in fetching", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun updateConvert(){             //update textbox after amount entered
+        val amountText = mainExpenseAmt.text.toString().trim()
+        val amountDouble = amountText.toDoubleOrNull()
+        val rate = cadRates[selectedCurrency] ?: return
+
+        if(conversionNeeded.isChecked && amountDouble != null){
+            val converted = amountDouble / rate
+            convertView.text = "Converted:- %.2f CAD".format(converted)
+            convertView.visibility = View.VISIBLE
+        }
+        else{
+            convertView.visibility = View.GONE
         }
     }
 

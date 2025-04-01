@@ -48,6 +48,14 @@
                 android:layout_marginTop="8dp"
                 android:enabled="false" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/convertView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Converted:- "
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <EditText
                 android:id="@+id/mainExpenseDate"
                 android:layout_width="match_parent"
