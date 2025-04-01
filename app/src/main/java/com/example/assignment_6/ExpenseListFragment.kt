@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,11 +30,10 @@ class ExpenseListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var btFinancialTips: Button                 //button for financial tip
     private lateinit var currencySpinner: Spinner
+    private lateinit var conversionNeeded: SwitchMaterial     //google material design switch added to enable currency spinner
    // private lateinit var totalTextView: TextView
-
     private lateinit var expenseAdapter: ExpenseAdapter
     private var listExpense = mutableListOf<Expense>()          //making mutable list
-
     private var cadRates: Map<String, Double> = emptyMap()
     private var selectedCurrency: String = "CAD"            //putting default string to CAD
 
@@ -48,6 +48,7 @@ class ExpenseListFragment : Fragment() {
         btAdd = view.findViewById(R.id.btAdd)
         recyclerView = view.findViewById(R.id.recyclerView)           //putting every require id's here
         currencySpinner = view.findViewById(R.id.mainSpinner)
+        conversionNeeded = view.findViewById(R.id.switchOn)                //conversion button declared here
         btFinancialTips = view.findViewById(R.id.btFinancialTips)
         //totalTextView = view.findViewById(R.id.totalExpenses)
 
@@ -68,7 +69,8 @@ class ExpenseListFragment : Fragment() {
             if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()){
                 val rate = cadRates[selectedCurrency] ?: 1.0
                 val amountDouble = amount.toDoubleOrNull() ?: 0.0
-                val converted = amountDouble * rate     //amount multiply by rate
+                val converted = if (conversionNeeded.isChecked) amountDouble * rate else 0.0
+                //amount multiply by rate if switch is checked
 
                 val expense = Expense(
                     name = name,
@@ -94,6 +96,13 @@ class ExpenseListFragment : Fragment() {
         btFinancialTips.setOnClickListener {
             val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("https://www.nerdwallet.com"))
             startActivity(intent) //intent.action_view to open webpage
+        }
+
+        conversionNeeded.setOnCheckedChangeListener { _, isChecked ->            //listener add for switch to enable spinner to display first item
+            currencySpinner.isEnabled = isChecked
+            if(isChecked){
+                currencySpinner.setSelection(0)
+            }
         }
 
         val transaction = parentFragmentManager.beginTransaction()
@@ -180,7 +189,6 @@ class ExpenseListFragment : Fragment() {
             val type = object : TypeToken<List<Expense>>() {}.type
             val loadedExpenses: List<Expense> = Gson().fromJson(json, type)
             expenseList.addAll(loadedExpenses)
-
             Log.d("FileStorage", "Expenses loaded successfully")
         }
         catch (e: FileNotFoundException)
@@ -208,7 +216,7 @@ class ExpenseListFragment : Fragment() {
             return ExpenseView(view)
         }
 
-        override fun onBindViewHolder(holder: ExpenseView, position: Int) {
+        override fun onBindViewHolder(holder: ExpenseView, position: Int){
             val expense = listExpense[position]
             holder.name.text = expense.name
             holder.amount.text = "${expense.amount} ${expense.currency}"  //it will for original currency
@@ -230,7 +238,7 @@ class ExpenseListFragment : Fragment() {
                         amount = expense.amount,   //taking name,amount,date,currency and convertedcost with action
                         date = expense.date,
                         currency = expense.currency,
-                        convertedCost = expense.convertedCost.toFloat()
+                        convertedCost = expense.convertedCost.toFloat()   //converted cost in float
                     )
                 findNavController().navigate(action)
             }

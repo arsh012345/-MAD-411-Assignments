@@ -35,11 +35,18 @@
                 android:hint="Amount"
                 android:inputType="numberDecimal" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Conversion Needed" />
+
             <Spinner
                 android:id="@+id/mainSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:enabled="false" />
 
             <EditText
                 android:id="@+id/mainExpenseDate"
