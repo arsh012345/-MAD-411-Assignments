@@ -3,6 +3,7 @@ package com.example.assignment_6
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,11 +26,17 @@ class ExpenseDetailsFragment : Fragment(){
         dDate = view.findViewById(R.id.detailExpenseDate)
         btBack = view.findViewById(R.id.btBackHome)
 
-        dName.text = "Name of expense: ${arguts.name}"
-        dAmount.text = "Amount: ${arguts.amount}"
-        dDate.text = "Date: ${arguts.date}"
-        dConverted.text = "Converted: %.2f CAD".format(arguts.convertedCost)
-
+        dName.text = "Name:- ${arguts.name}"
+        dAmount.text = "Amount:- ${arguts.amount}"
+        dDate.text = "Date:- ${arguts.date}"
+        if(arguts.currency != "CAD"){        //if currency is not CAD than it show text
+            dConverted.text = "Converted:- %.2fCAD".format(arguts.convertedCost)
+            dConverted.isVisible = true
+        }else
+        {
+            dConverted.text = ""
+            dConverted.isVisible = false
+        }
         btBack.setOnClickListener {
             findNavController().navigateUp()
         }

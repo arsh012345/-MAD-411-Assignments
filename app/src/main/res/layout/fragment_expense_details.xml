@@ -3,40 +3,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#E8EBB1"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/detailExpenseName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Expense Name: " />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:textSize="30sp"
+            android:background="#8BE4A1"
+            android:layout_marginBottom="30dp"
+            android:textStyle="bold"
+            android:textAlignment="center" />
 
-    <TextView
-        android:id="@+id/detailExpenseAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Amount: " />
+        <TextView
+            android:id="@+id/detailExpenseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center" />
 
-    <TextView
-        android:id="@+id/detailConvertedCost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CAD:- "
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/detailExpenseAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#F44336"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/detailExpenseDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Date: " />
+        <TextView
+            android:id="@+id/detailConvertedCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FF9800"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/btBackHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back Home" />
+        <TextView
+            android:id="@+id/detailExpenseDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#F44336"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btBackHome"
+            android:layout_width="163dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Back Home"
+            android:layout_marginTop="450dp"/>
 </LinearLayout>
