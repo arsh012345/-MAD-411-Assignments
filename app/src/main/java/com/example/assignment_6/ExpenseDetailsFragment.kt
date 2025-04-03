@@ -27,7 +27,7 @@ class ExpenseDetailsFragment : Fragment(){
         btBack = view.findViewById(R.id.btBackHome)
 
         dName.text = "Name:- ${arguts.name}"
-        dAmount.text = "Amount:- ${arguts.amount}"
+        dAmount.text = "Amount:- ${arguts.amount} ${arguts.currency}"
         dDate.text = "Date:- ${arguts.date}"
         if(arguts.currency != "CAD"){        //if currency is not CAD than it show text
             dConverted.text = "Converted:- %.2f CAD".format(arguts.convertedCost)
