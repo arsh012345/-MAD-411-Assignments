@@ -30,7 +30,7 @@ class ExpenseDetailsFragment : Fragment(){
         dAmount.text = "Amount:- ${arguts.amount}"
         dDate.text = "Date:- ${arguts.date}"
         if(arguts.currency != "CAD"){        //if currency is not CAD than it show text
-            dConverted.text = "Converted:- %.2fCAD".format(arguts.convertedCost)
+            dConverted.text = "Converted:- %.2f CAD".format(arguts.convertedCost)
             dConverted.isVisible = true
         }else
         {

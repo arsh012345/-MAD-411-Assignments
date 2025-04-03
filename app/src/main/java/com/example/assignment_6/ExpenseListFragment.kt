@@ -205,9 +205,9 @@ class ExpenseListFragment : Fragment() {
     }
 
     private fun updateFooterTotal() {
-        val total = listExpense.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+        val total = listExpense.sumOf { it.convertedCost }
         val footerFragment = parentFragmentManager.findFragmentById(R.id.footerContainer) as? FooterFragment
-        footerFragment?.updateTotal("Total Expenses: $$total")
+        footerFragment?.updateTotal("Total Expenses: %.2f CAD".format(total))
     }                           //updating footer total here
 
     private fun saveExpenses() {                               //saving expense in json file here
