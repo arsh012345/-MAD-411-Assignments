@@ -43,7 +43,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="16sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/expenseDate"

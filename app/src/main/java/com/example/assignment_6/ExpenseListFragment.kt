@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -76,14 +77,19 @@ class ExpenseListFragment : Fragment() {
             if (name.isNotEmpty() && amount.isNotEmpty() && date.isNotEmpty()){
                 val rate = cadRates[selectedCurrency] ?: 1.0
                 val amountDouble = amount.toDoubleOrNull() ?: 0.0
-                val converted = if (conversionNeeded.isChecked) amountDouble / rate else 0.0
-                //amount divided by rate if switch is checked
 
+                val converted: Double                   //Added logic if switch for conversion is off
+                val currency: String                      //then conversion should not happen
                 if(conversionNeeded.isChecked){       //simple logic for textview of converted cost
+                    converted = amountDouble/rate
+                    currency = selectedCurrency
                     convertView.text = "Converted:- %.2f CAD".format(converted)
                     convertView.visibility = View.VISIBLE
-                }                //converted amount view if converstion is done
+                }                                      //converted amount view if converstion is done
                 else{
+                    converted = amountDouble      //only use conversion if switch is on
+                    currency = "CAD"
+                    convertView.text = ""
                     convertView.visibility = View.GONE
                 }
 
@@ -91,7 +97,7 @@ class ExpenseListFragment : Fragment() {
                     name = name,
                     amount = amount,
                     date = date,
-                    currency = selectedCurrency,
+                    currency = currency,
                     convertedCost = converted
                 )
                 listExpense.add(expense)
@@ -108,12 +114,12 @@ class ExpenseListFragment : Fragment() {
             }       //using snackbar instead of toast
         }
 
-        btFinancialTips.setOnClickListener {
+        btFinancialTips.setOnClickListener{
             val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("https://www.nerdwallet.com"))
             startActivity(intent) //intent.action_view to open webpage
         }
 
-        conversionNeeded.setOnCheckedChangeListener { _, isChecked ->            //listener add for switch to enable spinner to display first item
+        conversionNeeded.setOnCheckedChangeListener{ _, isChecked ->            //listener add for switch to enable spinner to display first item
             currencySpinner.isEnabled = isChecked
             if(isChecked){
                 currencySpinner.setSelection(0)
@@ -253,8 +259,15 @@ class ExpenseListFragment : Fragment() {
             holder.name.text = expense.name
             holder.amount.text = "${expense.amount} ${expense.currency}"  //it will for original currency
             holder.date.text = expense.date         //added date in binding
-            holder.converted.text = "CAD:- ${"%.2f".format(expense.convertedCost)}"  //it will show the converted cost
 
+            if(expense.currency != "CAD")               //if currency is not CAD then show converted
+            {
+                holder.converted.text = "CAD:- ${"%.2f".format(expense.convertedCost)}"  //it will show the converted cost
+                holder.converted.isVisible = true
+            }else{
+                holder.converted.text = ""
+                holder.converted.isVisible = false  //else view go invisible
+            }
             holder.btDelete.setOnClickListener {
                 listExpense.removeAt(position)
                 notifyItemRemoved(position)
