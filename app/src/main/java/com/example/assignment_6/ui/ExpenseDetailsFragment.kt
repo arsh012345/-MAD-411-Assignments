@@ -1,4 +1,4 @@
-package com.example.assignment_6
+package com.example.assignment_6.ui
 
 import android.os.Bundle
 import android.view.*
@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.assignment_6.R
 
 class ExpenseDetailsFragment : Fragment(){
     private lateinit var dName: TextView
