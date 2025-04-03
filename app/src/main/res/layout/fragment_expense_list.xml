@@ -39,7 +39,8 @@
                 android:id="@+id/switchOn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Conversion Needed" />
+                android:text="Conversion Needed"
+                android:textSize="16sp" />
 
             <Spinner
                 android:id="@+id/mainSpinner"
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Converted:- "
                 android:textStyle="bold"
+                android:textSize="16sp"
                 android:visibility="gone" />
 
             <EditText
