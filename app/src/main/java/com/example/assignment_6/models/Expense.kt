@@ -1,4 +1,4 @@
-package com.example.assignment_6
+package com.example.assignment_6.models
 
 data class Expense(
     val name: String,

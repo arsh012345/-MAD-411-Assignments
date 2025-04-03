@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.widget.addTextChangedListener
+import com.example.assignment_6.models.Expense
 import com.example.assignment_6.network.RetrofitInterface
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
